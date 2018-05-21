@@ -25,28 +25,7 @@ environment:
 
 build_script:
   # Build OpenBLAS, build and install the test file
-  - if "%BUILD_BITS%"=="32" (set PLAT=i686) else (set PLAT=x86_64)
-  - set VC9_ROOT=C:\Users\appveyor\AppData\Local\Programs\Common\Microsoft\Visual C++ for Python\9.0\VC
-  - PATH=%MSYS2_ROOT%\usr\bin;%PATH%
-  # Get mingw-builds compiler chain, put on path
-  # Quote for env var to protect spaces.
-  - curl -L "%MINGW_URL%" -o downloads\mingw_distro.7z
-  - 7z x downloads\mingw_distro.7z
-  - PATH=%__CD__%\mingw%BUILD_BITS%\bin;%PATH%
-  # Remove competing gcc / gfortran
-  - pacman -Rs --noconfirm gcc gcc-fortran mingw-w64-%PLAT%-toolchain
-  # zip needed for packing archive
-  - pacman -Sy --noconfirm zip
-  - set MSYSTEM=MINGW%BUILD_BITS%
-  - set START_DIR=%__CD__%
-  - curl -L https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com/openblas-2c7392f0_gcc6_3_0_win32.zip -o ob.zip
-  - unzip ob.zip
-  - git clone https://github.com/pv/OpenBLAS.git
-  - cd OpenBLAS
-  - git checkout -t origin/getrf-smoketest
-  - cp ..\32\lib\libopenblas_2c7392f0_gcc6_3_0.a .
-  - cd utest
-  - make LIBNAME=libopenblas_2c7392f0_gcc6_3_0.a
+  - echo
 
 test_script:
   - echo
