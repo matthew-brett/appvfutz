@@ -16,7 +16,8 @@ build_script:
   - SET NUMEXPR_NUM_THREADS=1
   - SET OMP_NUM_THREADS=1
   - pip install "pytest<4" pytest-xdist
-  - python setup.py develop
+  - where pip
+  - where python
   - echo %PATH%
 
 test_script:
