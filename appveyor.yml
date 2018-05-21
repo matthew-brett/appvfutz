@@ -3,29 +3,20 @@
 os: Visual Studio 2015
 
 environment:
-  global:
-    OPENBLAS_COMMIT: 2c7392f0
-    OPENBLAS_ROOT: c:\opt
-    MSYS2_ROOT: c:\msys64
-    WHEELHOUSE_UPLOADER_USERNAME: travis-worker
-    WHEELHOUSE_UPLOADER_SECRET:
-      secure: 9s0gdDGnNnTt7hvyNpn0/ZzOMGPdwPp2SewFTfGzYk7uI+rdAN9rFq2D1gAP4NQh
-    PYTHON: "C:\\Python27"
-
-  # Need for mingw-builds discussed at
-  # https://github.com/xianyi/OpenBLAS/issues/1503
-  # Downloads via https://sourceforge.net/projects/mingw-w64/files
-  # Note spaces instead of %20 in URL, to avoid Windows env var expansion
   matrix:
-    - BUILD_BITS: 32
-      MINGW_URL: "https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win32/Personal Builds/mingw-builds/6.3.0/threads-posix/dwarf/i686-6.3.0-release-posix-dwarf-rt_v5-rev0.7z/download"
-
-    - BUILD_BITS: 64
-      MINGW_URL: "https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win64/Personal Builds/mingw-builds/6.3.0/threads-posix/seh/x86_64-6.3.0-release-posix-seh-rt_v5-rev0.7z/download"
+    # Pip builds
+    - PYTHON: C:\Python27-x64
+    # Conda builds
+    - PY_MAJOR_VER: 2
+      PYTHON_ARCH: "x86"
 
 build_script:
-  # Build OpenBLAS, build and install the test file
-  - echo
+  - If Defined PY_MAJOR_VER ( tools\appveyor_conda.bat ) else ( tools\appveyor_pip.bat )
+  - SET MKL_NUM_THREADS=1
+  - SET NUMEXPR_NUM_THREADS=1
+  - SET OMP_NUM_THREADS=1
+  - pip install "pytest<4" pytest-xdist
+  - python setup.py develop
 
 test_script:
   - echo
