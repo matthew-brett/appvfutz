@@ -1,24 +1,22 @@
 # vim ft=yaml
 
-os: Visual Studio 2015
-
 environment:
-  matrix:
-    # Pip builds
-    - PYTHON: C:\Python27-x64
-    # Conda builds
-    - PY_MAJOR_VER: 2
-      PYTHON_ARCH: "x86"
+  global:
+      WHEELHOUSE_UPLOADER_USERNAME: travis-worker
+      WHEELHOUSE_UPLOADER_SECRET:
+        secure:
+            9s0gdDGnNnTt7hvyNpn0/ZzOMGPdwPp2SewFTfGzYk7uI+rdAN9rFq2D1gAP4NQh
+      PYTHON: C:\Python36
 
 build_script:
-  - If Defined PY_MAJOR_VER ( call tools\appveyor_conda.bat ) else ( call tools\appveyor_pip.bat )
-  - SET MKL_NUM_THREADS=1
-  - SET NUMEXPR_NUM_THREADS=1
-  - SET OMP_NUM_THREADS=1
-  - pip install "pytest<4" pytest-xdist
-  - where pip
-  - where python
-  - echo %PATH%
+  - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+  - mkdir dist
+  - cp appveyor.yml dist\testfile
+  - pip install wheelhouse-uploader
+  - python -m wheelhouse_uploader upload
+    --no-ssl-check --local-folder=dist
+    --no-update-index
+    wheels
 
 test_script:
   - echo
