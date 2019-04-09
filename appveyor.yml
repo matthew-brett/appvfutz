@@ -10,13 +10,6 @@ environment:
 
 build_script:
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
-  - mkdir dist
-  - cp appveyor.yml dist\testfile
-  - pip install wheelhouse-uploader
-  - python -m wheelhouse_uploader upload
-    --no-ssl-check --local-folder=dist
-    --no-update-index
-    wheels
 
 test_script:
   - echo
